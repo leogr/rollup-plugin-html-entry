@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf dist && rollup -c",
     "pretest": "npm run lint && npm run build",
-    "test": "mocha",
+    "test": "echo TODO",
     "lint": "eslint index.js",
     "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -s",
     "changelog:edit": "$(git var GIT_EDITOR) CHANGELOG.md",
