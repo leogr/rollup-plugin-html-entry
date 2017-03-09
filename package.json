@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-html-entry",
-  "version": "0.0.0",
+  "version": "0.0.1-0",
   "description": "",
   "main": "dist/rollup-plugin-html-entry.js",
   "jsnext:main": "dist/rollup-plugin-html-entry.mjs",
@@ -27,7 +27,7 @@
   ],
   "author": "Leonardo Grasso <me@leonardograsso.com>",
   "license": "MIT",
-   "bugs": {
+  "bugs": {
     "url": "https://github.com/leogr/rollup-plugin-html-entry/issues"
   },
   "homepage": "https://github.com/leogr/rollup-plugin-html-entry",
