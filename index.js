@@ -12,6 +12,7 @@ export default (config) => {
   let include = "**/*.html"
   let exclude = []
   let exporter = (path) => `export * from ${JSON.stringify(path)};`
+  let output = false
 
   const configure = (options) => {
     if (typeof options === "string") {
@@ -25,8 +26,9 @@ export default (config) => {
         exporter = (path) => `import ${JSON.stringify(path)};`
       }
     }
-    if (exclude.length) {
-      exclude = matched(exclude, { realpath: true })
+
+    if (options.output) {
+      output = options.output
     }
   }
 
@@ -43,7 +45,7 @@ export default (config) => {
   const visitor = {
 
     import(link, { location }) {
-      if (blackList[location]) {
+      if (output && blackList[location]) {
         remove(link)
       }
     },
@@ -58,30 +60,47 @@ export default (config) => {
       if (src) {
         if (isLocal(src)) {
           pathsList.push(resolve(path, src))
-          remove(element)
+          if (output) {
+            remove(element)
+          }
         }
       } else {
         // (todo) should avoid possibile collision against real paths
         const virtualPath = `${path}_${index}.js`
         pathsList.push(virtualPath)
         virtualPaths[virtualPath] = getTextContent(element)
-        remove(element)
+        if (output) {
+          remove(element)
+        }
       }
     }
 
   }
 
   const analyze = () => {
+
+    if (include.length) {
+      include = matched(
+        include.concat(exclude.map((pattern) => `!${pattern}`)),
+        { realpath: true }
+      )
+    }
+
+    if (exclude.length) {
+      exclude = matched(exclude, { realpath: true })
+    }
+
     for (const i in exclude) {
       blackList[exclude[i]] = true
     }
+
     const helper = new VisitorHelper(visitor, predicates.hasTagName("script"))
     for (const i in include) {
       helper.enter(include[i])
     }
   }
 
-  const output = (destPath) => {
+  const writeHtmls = (destPath) => {
     const promises = []
     for (const filepath in htmls) {
       const doc = htmls[filepath]
@@ -136,8 +155,8 @@ export default (config) => {
     },
 
     ongenerate() {
-      if (config.output) {
-        return output(config.output)
+      if (output) {
+        return writeHtmls(output)
       }
     }
   }
