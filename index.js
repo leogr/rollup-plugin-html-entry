@@ -1,10 +1,56 @@
-import { writeFile } from "fs"
+import { writeFile, readdirSync, mkdirSync } from "fs"
 import { resolve as resolvePath, relative as relativePath, dirname } from "path"
-import { mkdir } from "shelljs"
 import { sync as matched } from "matched"
 import { predicates, isLocal, resolve, VisitorHelper } from "html-imports-visitor"
 import { serialize } from "parse5"
 import { getAttribute, getTextContent, remove } from "dom5"
+
+const mkdir = (path) => {
+  try {
+    readdirSync(path)
+  } catch (err) {
+    mkdir(dirname(path))
+    mkdirSync(path)
+  }
+}
+
+const writeFileEx = (path, doc) => (res, rej) => {
+  writeFile(path, serialize(doc), (err) => err ? rej(err) : res())
+}
+
+const mkdirEx = (path) => (res, rej) => {
+  try {
+    mkdir(path)
+    res()
+  } catch (err) {
+    rej(err)
+  }
+}
+
+const writeHtmls = (htmls, destPath) => {
+
+  const executors = {}
+  for (const filepath in htmls) {
+    const destFilepath = resolvePath(destPath, relativePath(process.cwd(), filepath))
+    const destDirpath = dirname(destFilepath)
+    const ex = writeFileEx(destFilepath, htmls[filepath])
+    if (executors[destDirpath]) {
+      executors[destDirpath].push(ex)
+    } else {
+      executors[destDirpath] = [ex]
+    }
+  }
+
+  return Promise.all(
+    Object.keys(executors).map(
+      (path) => new Promise(mkdirEx(path)).then(
+        Promise.all(
+          executors[path].map((ex) => new Promise(ex))
+        )
+      )
+    )
+  )
+}
 
 const entry = "\0rollup-plugin-html-entry:entry-point"
 
@@ -74,7 +120,6 @@ export default (config) => {
         }
       }
     }
-
   }
 
   const analyze = () => {
@@ -98,26 +143,6 @@ export default (config) => {
     for (const i in include) {
       helper.enter(include[i])
     }
-  }
-
-  const writeHtmls = (destPath) => {
-    const promises = []
-    for (const filepath in htmls) {
-      const doc = htmls[filepath]
-      // (todo) check the correctness of path construction
-      const destFilepath = resolvePath(destPath, relativePath("./", filepath))
-      promises.push(new Promise((res, rej) => { // eslint-disable-line no-loop-func
-        mkdir("-p", dirname(destFilepath))
-        writeFile(destFilepath, serialize(doc), (err) => {
-          if (err) {
-            rej(err)
-          } else {
-            res()
-          }
-        })
-      }))
-    }
-    return Promise.all(promises)
   }
 
   return {
@@ -156,7 +181,7 @@ export default (config) => {
 
     ongenerate() {
       if (output) {
-        return writeHtmls(output)
+        return writeHtmls(htmls, output)
       }
     }
   }
