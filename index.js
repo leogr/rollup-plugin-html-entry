@@ -82,11 +82,11 @@ export default (config) => {
     configure(config)
   }
 
-  const realPaths = {}
-  const virtualPaths = {}
-  const pathsList = []
-  const htmls = {}
-  const blackList = {}
+  let realPaths
+  let virtualPaths
+  let pathsList
+  let htmls
+  let blackList
 
   const visitor = {
 
@@ -124,24 +124,30 @@ export default (config) => {
 
   const analyze = () => {
 
+    // Reset
+    realPaths = {}
+    virtualPaths = {}
+    pathsList = []
+    htmls = {}
+    blackList = {}
+
+    const helper = new VisitorHelper(visitor, predicates.hasTagName("script"))
+
+    if (exclude.length) {
+      const excluded = matched(exclude, { realpath: true })
+      for (const i in excluded) {
+        blackList[excluded[i]] = true
+      }
+    }
+
     if (include.length) {
-      include = matched(
+      const included = matched(
         include.concat(exclude.map((pattern) => `!${pattern}`)),
         { realpath: true }
       )
-    }
-
-    if (exclude.length) {
-      exclude = matched(exclude, { realpath: true })
-    }
-
-    for (const i in exclude) {
-      blackList[exclude[i]] = true
-    }
-
-    const helper = new VisitorHelper(visitor, predicates.hasTagName("script"))
-    for (const i in include) {
-      helper.enter(include[i])
+      for (const i in included) {
+        helper.enter(included[i])
+      }
     }
   }
 
