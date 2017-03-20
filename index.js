@@ -57,6 +57,7 @@ const entry = "\0rollup-plugin-html-entry:entry-point"
 export default (config) => {
   let include = "**/*.html"
   let exclude = []
+  let external = []
   let exporter = (path) => `export * from ${JSON.stringify(path)};`
   let output = false
 
@@ -68,6 +69,7 @@ export default (config) => {
     } else {
       include = options.include || []
       exclude = options.exclude || []
+      external = options.external || []
       if (options.exports === false) {
         exporter = (path) => `import ${JSON.stringify(path)};`
       }
@@ -86,12 +88,13 @@ export default (config) => {
   let virtualPaths
   let pathsList
   let htmls
-  let blackList
+  let excludeMap
 
   const visitor = {
 
     import(link, { location }) {
-      if (output && blackList[location]) {
+      if (excludeMap[location]) {
+        // remove <link rel="import"> and avoid entering the doc
         remove(link)
       }
     },
@@ -129,20 +132,31 @@ export default (config) => {
     virtualPaths = {}
     pathsList = []
     htmls = {}
-    blackList = {}
+    excludeMap = {}
 
     const helper = new VisitorHelper(visitor, predicates.hasTagName("script"))
 
     if (exclude.length) {
       const excluded = matched(exclude, { realpath: true })
       for (const i in excluded) {
-        blackList[excluded[i]] = true
+        excludeMap[excluded[i]] = true
+      }
+    }
+
+    if (external.length) {
+      const omitted = matched(
+        external,
+        { realpath: true }
+      )
+      for (const i in omitted) {
+        helper.omit(omitted[i])
       }
     }
 
     if (include.length) {
       const included = matched(
-        include.concat(exclude.map((pattern) => `!${pattern}`)),
+        include.concat(exclude.map((pattern) => `!${pattern}`))
+               .concat(external.map((pattern) => `!${pattern}`)),
         { realpath: true }
       )
       for (const i in included) {

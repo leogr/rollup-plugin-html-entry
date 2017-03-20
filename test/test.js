@@ -17,14 +17,26 @@ const doesNotInclude = (string, substring) => {
 }
 
 const fileExists = (path) => {
- if (!fs.existsSync(path) || fs.lstatSync(path).isDirectory()) {
-   ok(false, `expected output file ${JSON.stringify(path)}`)
- }
+  if (!fs.existsSync(path) || fs.lstatSync(path).isDirectory()) {
+    ok(false, `expected output file ${JSON.stringify(path)} to exist`)
+  }
 }
 
-const fileDoesNotIncludes = (path, substring) => {
+const fileDoesNotExist = (path) => {
+  if (fs.existsSync(path)) {
+    ok(false, `expected output file ${JSON.stringify(path)} to not exist`)
+  }
+}
+
+const fileDoesNotInclude = (path, substring) => {
   if (fs.existsSync(path) && fs.readFileSync(path).indexOf(substring) !== -1) {
     ok(false, `expected output file ${JSON.stringify(path)} not to include ${JSON.stringify(substring)}`)
+  }
+}
+
+const fileIncludes = (path, substring) => {
+  if (fs.existsSync(path) && fs.readFileSync(path).indexOf(substring) === -1) {
+    ok(false, `expected output file ${JSON.stringify(path)} to include ${JSON.stringify(substring)}`)
   }
 }
 
@@ -97,7 +109,59 @@ describe("rollup-plugin-html-entry", () => {
     ).then((bundle) => {
       const code = bundle.generate({ format: "cjs" }).code
       includes(code, "exports.zero = zero;")
+      includes(code, `console.log("Hello, 2");`)
       doesNotInclude(code, "exports.one = one;")
+    })
+  )
+
+  it("takes an {include,external,output} object as input", () =>
+    makeBundle(
+      { include: ["test/fixtures/all-imports.html"], external: ["test/fixtures/1.html"], output: "tmp" }
+    ).then((bundle) => {
+      const code = bundle.generate({ format: "cjs" }).code
+      includes(code, "exports.zero = zero;")
+      includes(code, `console.log("Hello, 2");`)
+      doesNotInclude(code, "exports.one = one;")
+      return bundle.write({ format: "es", dest: "tmp/bundle.js"})
+    }).then(() => {
+      matched(["tmp/test/fixtures/*.html", "!tmp/test/fixtures/1.html"]).forEach((path) => {
+        fileExists(path)
+        fileDoesNotInclude(path, "<script>")
+      })
+      fileExists("test/fixtures/1.html")
+      fileIncludes("test/fixtures/1.html", "<script>export const one = 1;</script>")
+    })
+  )
+
+  it("takes an {include,external,exclude,output} object as input", () =>
+    makeBundle({
+        include: ["test/fixtures/all-imports.html"],
+        external: ["test/fixtures/0-and-1.html"],
+        exclude: ["test/fixtures/3.html"],
+        output: "tmp"
+    }).then((bundle) => {
+      const code = bundle.generate({ format: "cjs" }).code
+      doesNotInclude(code, "exports.zero = zero;") // external
+      doesNotInclude(code, "exports.one = one;") // external
+      doesNotInclude(code, `export const three = 3;`) // excluded
+      includes(code, `console.log("Hello, 2");`)
+      return bundle.write({ format: "es", dest: "tmp/bundle.js"})
+    }).then(() => {
+
+      fileExists("tmp/test/fixtures/all-imports.html")
+      fileIncludes("tmp/test/fixtures/all-imports.html", `<link rel="import" href="0.html">`) // external
+      fileIncludes("tmp/test/fixtures/all-imports.html", `<link rel="import" href="1.html">`) // external
+      fileIncludes("tmp/test/fixtures/all-imports.html", `<link rel="import" href="2.html">`)
+      fileDoesNotInclude("tmp/test/fixtures/all-imports.html", `<link rel="import" href="3.html">`) // excluded
+
+      fileExists("tmp/test/fixtures/2.html")
+      fileDoesNotInclude("tmp/test/fixtures/2.html", "<script>")
+
+      fileDoesNotExist("tmp/test/fixtures/0-and-1.html")
+      fileDoesNotExist("tmp/test/fixtures/0.html")
+      fileDoesNotExist("tmp/test/fixtures/1.html")
+      fileDoesNotExist("tmp/test/fixtures/3.html")
+
     })
   )
 
@@ -120,7 +184,7 @@ describe("rollup-plugin-html-entry", () => {
     ).then(() => {
       matched(["tmp/test/fixtures/*.html"]).forEach((path) => {
         fileExists(path)
-        fileDoesNotIncludes(path, "<script>")
+        fileDoesNotInclude(path, "<script>")
       })
     })
   )
