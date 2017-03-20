@@ -1000,9 +1000,9 @@ hosted-git-info@^2.1.4:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.2.0.tgz#7a0d097863d886c0fabbdcd37bf1758d8becf8a5"
 
-html-imports-visitor@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/html-imports-visitor/-/html-imports-visitor-0.0.1.tgz#882710403aee2fcccbd3efd37fb1b37c0cba40f4"
+html-imports-visitor@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/html-imports-visitor/-/html-imports-visitor-0.1.0.tgz#85e6ae97a725ac194f3f856b8a4c5c5dda8a849c"
   dependencies:
     dom5 "^2.1.0"
     parse5 "^3.0.2"
@@ -1823,7 +1823,7 @@ set-getter@^0.1.0:
   dependencies:
     to-object-path "^0.3.0"
 
-shelljs@^0.7.5, shelljs@^0.7.6:
+shelljs@^0.7.5:
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.7.6.tgz#379cccfb56b91c8601e4793356eb5382924de9ad"
   dependencies:
