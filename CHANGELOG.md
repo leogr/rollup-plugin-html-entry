@@ -1,3 +1,30 @@
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/leogr/rollup-plugin-html-entry/compare/v0.0.1-0...v0.1.0) (2017-03-20)
+
+
+### Docs
+
+* Readme ([e22ea53d3db0e0328e7db0e0005fb40ae9140474](https://github.com/leogr/rollup-plugin-html-entry/commit/e22ea53d3db0e0328e7db0e0005fb40ae9140474))
+
+### Fix
+
+* Support for include and exclude options ([736f96495c9e35317e5bd107e159f379d4bb2f95](https://github.com/leogr/rollup-plugin-html-entry/commit/736f96495c9e35317e5bd107e159f379d4bb2f95))
+
+### New
+
+* Support for external files ([647aee5b85e8c42ed39b3dcf96a725fd99f0ad6c](https://github.com/leogr/rollup-plugin-html-entry/commit/647aee5b85e8c42ed39b3dcf96a725fd99f0ad6c))
+* Test HTML output ([0fa8d7ced7da18035b3c4a091bdcd8cfb5d6f325](https://github.com/leogr/rollup-plugin-html-entry/commit/0fa8d7ced7da18035b3c4a091bdcd8cfb5d6f325))
+
+### Update
+
+* Improve async output writing ([a37a6bdd9d159c4cce45102cffb6b9666eea5987](https://github.com/leogr/rollup-plugin-html-entry/commit/a37a6bdd9d159c4cce45102cffb6b9666eea5987))
+
+### Upgrade
+
+* HTML Imports visitor 0.1.0 ([534af7921768362c948a187046c5d499ce878b08](https://github.com/leogr/rollup-plugin-html-entry/commit/534af7921768362c948a187046c5d499ce878b08))
+
+
+
 <a name="0.0.1-0"></a>
 ## 0.0.1-0 (2017-03-09)
 
