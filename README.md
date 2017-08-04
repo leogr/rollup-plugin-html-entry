@@ -1,3 +1,5 @@
+[![Build Status](https://img.shields.io/travis/leogr/rollup-plugin-html-entry.svg?style=flat-square)](https://travis-ci.org/leogr/rollup-plugin-html-entry)
+
 # rollup-plugin-html-entry
 
 Use HTML files as entry points in your [rollup](https://github.com/rollup/rollup) bundle.
