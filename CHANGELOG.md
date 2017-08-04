@@ -1,3 +1,21 @@
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/leogr/rollup-plugin-html-entry/compare/v0.1.0...v0.1.1) (2017-08-04)
+
+
+### Build
+
+* Improve publishing system ([3461dca8f55b6aff4219f0b6d6d79e74c5d09fc8](https://github.com/leogr/rollup-plugin-html-entry/commit/3461dca8f55b6aff4219f0b6d6d79e74c5d09fc8))
+
+### Docs
+
+* Build status badge ([d88d03acf3d793af49df5914270c57ddf974348d](https://github.com/leogr/rollup-plugin-html-entry/commit/d88d03acf3d793af49df5914270c57ddf974348d))
+
+### New
+
+* CI setup  ([e9c2f687532550f10e7f4ff075c66cbc035b5110](https://github.com/leogr/rollup-plugin-html-entry/commit/e9c2f687532550f10e7f4ff075c66cbc035b5110)), closes [#1](https://github.com/leogr/rollup-plugin-html-entry/issues/1)
+
+
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/leogr/rollup-plugin-html-entry/compare/v0.0.1-0...v0.1.0) (2017-03-20)
 
