@@ -9,12 +9,12 @@
     "pretest": "npm run lint && npm run build",
     "test": "mocha --compilers js:buble/register",
     "lint": "eslint index.js",
+    "from:master": "node -e 'process.exit(require(\"git-rev-sync\").branch(process.cwd()) !== \"master\")'",
     "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -s",
     "changelog:edit": "$(git var GIT_EDITOR) CHANGELOG.md",
-    "preversion": "npm run test",
+    "preversion": "npm run from:master && npm test",
     "version": "npm run changelog && npm run changelog:edit && git add CHANGELOG.md",
-    "postversion": "git push && git push --tags",
-    "prepublish": "npm test"
+    "postversion": "git push && git push --tags && git checkout develop && git merge master && git push && git checkout master"
   },
   "repository": "leogr/rollup-plugin-html-entry",
   "git": {
@@ -33,11 +33,13 @@
   "homepage": "https://github.com/leogr/rollup-plugin-html-entry",
   "devDependencies": {
     "babel-eslint": "^7.1.1",
+    "buble": "^0.15.2",
     "conventional-changelog-cli": "^1.2.0",
     "eslint": "^3.12.2",
     "eslint-config-walmart": "^1.1.1",
     "eslint-plugin-filenames": "^1.1.0",
     "eslint-plugin-import": "^2.2.0",
+    "git-rev-sync": "^1.9.1",
     "git-scripts": "^0.2.1",
     "mocha": "^3.0.0",
     "rollup": "^0.39.0",
