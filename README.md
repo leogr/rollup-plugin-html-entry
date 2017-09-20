@@ -47,23 +47,23 @@ $ npm install [--save-dev] rollup-plugin-html-entry
 
 ## Usage
 
-In `rollup.config.js`:
+This plugin requires at least v0.48.0 of rollup. In `rollup.config.js`:
 
 ```js
 import htmlEntry from 'rollup-plugin-html-entry';
 
 export default {
-  entry: 'test/**/*.html',
+  input: 'test/**/*.html',
   plugins: [htmlEntry()]
 };
 ```
 
-The `entry` above is the simplest form which simply takes a glob string.
+The `input` above is the simplest form which simply takes a glob string.
 You may pass an array of glob strings or an object with one or more of the following options:
 
 ```js
 export default {
-  entry: {
+  input: {
     // Arrays of globs to include
     include: ['index.html', 'and/globs/**/*.html'],
     // Arrays of globs to exclude
@@ -80,7 +80,7 @@ By default HTML files will be not written. If `output` option is present, HTML f
 
 ```js
 export default {
-  entry: 'index.html',
+  input: 'index.html',
   plugins: [htmlEntry({ output: "build" })]
   // ...
 };
@@ -91,7 +91,7 @@ such cases, use the `exports: false` option like so:
 
 ```js
 export default {
-  entry: 'index.html',
+  input: 'index.html',
   plugins: [htmlEntry({ exports: false })]
 };
 ```
