@@ -5,7 +5,7 @@ import commonjs from "rollup-plugin-commonjs"
 const pkg = require("./package.json")
 
 export default {
-  entry: "index.js",
+  input: "index.js",
   plugins: [
     buble({
       include: "index.js",
@@ -20,14 +20,14 @@ export default {
     commonjs()
   ],
   external: Object.keys(pkg["dependencies"]).concat("path", "fs"),
-  targets: [
+  output: [
     {
       format: "cjs",
-      dest: pkg["main"]
+      file: pkg["main"]
     },
     {
       format: "es",
-      dest: pkg["jsnext:main"]
+      file: pkg["jsnext:main"]
     }
   ]
 }
