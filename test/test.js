@@ -41,7 +41,7 @@ const fileIncludes = (path, substring) => {
 }
 
 const makeBundle = (entries) => {
-  return rollup({ entry: entries, plugins: [htmlEntry()] })
+  return rollup({ input: entries, plugins: [htmlEntry()] })
 }
 
 
@@ -66,64 +66,71 @@ describe("rollup-plugin-html-entry", () => {
   })
 
   it("takes a single file as input", () =>
-    makeBundle("test/fixtures/0.html").then((bundle) => {
-      const code = bundle.generate({ format: "cjs" }).code
-      includes(code, "exports.zero = zero;")
-    })
+    makeBundle("test/fixtures/0.html").then((bundle) =>
+      bundle.generate({ format: "cjs" }).then(({ code }) => {
+        includes(code, "exports.zero = zero;")
+      })
+    )
   )
 
   it("takes an array of files as input", () =>
-    makeBundle(["test/fixtures/0.html", "test/fixtures/1.html"]).then((bundle) => {
-      const code = bundle.generate({ format: "cjs" }).code
-      includes(code, "exports.zero = zero;")
-      includes(code, "exports.one = one;")
-    })
+    makeBundle(["test/fixtures/0.html", "test/fixtures/1.html"]).then((bundle) =>
+      bundle.generate({ format: "cjs" }).then(({ code }) => {
+        includes(code, "exports.zero = zero;")
+        includes(code, "exports.one = one;")
+      })
+    )
   )
 
   it("allows an empty array as input", () =>
-    makeBundle([]).then((bundle) => {
-      const code = bundle.generate({ format: "cjs" }).code
-      doesNotInclude(code, "exports")
-    })
+    makeBundle([]).then((bundle) =>
+      bundle.generate({ format: "cjs" }).then(({ code }) => {
+        doesNotInclude(code, "exports")
+      })
+    )
   )
 
   it("takes a glob as input", () =>
-    makeBundle("test/fixtures/{0,1}.html").then((bundle) => {
-      const code = bundle.generate({ format: "cjs" }).code
-      includes(code, "exports.zero = zero;")
-      includes(code, "exports.one = one;")
-    })
+    makeBundle("test/fixtures/{0,1}.html").then((bundle) =>
+      bundle.generate({ format: "cjs" }).then(({ code }) => {
+        includes(code, "exports.zero = zero;")
+        includes(code, "exports.one = one;")
+      })
+    )
   )
 
   it("takes an array of globs as input", () =>
-    makeBundle(["test/fixtures/{0,}.html", "test/fixtures/{1,}.html"]).then((bundle) => {
-      const code = bundle.generate({ format: "cjs" }).code
-      includes(code, "exports.zero = zero;")
-      includes(code, "exports.one = one;")
-    })
+    makeBundle(["test/fixtures/{0,}.html", "test/fixtures/{1,}.html"]).then((bundle) =>
+      bundle.generate({ format: "cjs" }).then(({ code }) => {
+        includes(code, "exports.zero = zero;")
+        includes(code, "exports.one = one;")
+      })
+    )
   )
 
   it("takes an {include,exclude} object as input", () =>
     makeBundle(
       { include: ["test/fixtures/*.html"], exclude: ["test/fixtures/1.html"] }
-    ).then((bundle) => {
-      const code = bundle.generate({ format: "cjs" }).code
-      includes(code, "exports.zero = zero;")
-      includes(code, `console.log("Hello, 2");`)
-      doesNotInclude(code, "exports.one = one;")
-    })
+    ).then((bundle) =>
+      bundle.generate({ format: "cjs" }).then(({ code }) => {
+        includes(code, "exports.zero = zero;")
+        includes(code, `console.log("Hello, 2");`)
+        doesNotInclude(code, "exports.one = one;")
+      })
+    )
   )
 
   it("takes an {include,external,output} object as input", () =>
     makeBundle(
       { include: ["test/fixtures/all-imports.html"], external: ["test/fixtures/1.html"], output: "tmp" }
-    ).then((bundle) => {
-      const code = bundle.generate({ format: "cjs" }).code
-      includes(code, "exports.zero = zero;")
-      includes(code, `console.log("Hello, 2");`)
-      doesNotInclude(code, "exports.one = one;")
-      return bundle.write({ format: "es", dest: "tmp/bundle.js"})
-    }).then(() => {
+    ).then((bundle) =>
+      bundle.generate({ format: "cjs" }).then(({ code }) => {
+        includes(code, "exports.zero = zero;")
+        includes(code, `console.log("Hello, 2");`)
+        doesNotInclude(code, "exports.one = one;")
+        return bundle.write({ format: "es", file: "tmp/bundle.js"})
+      })
+    ).then(() => {
       matched(["tmp/test/fixtures/*.html", "!tmp/test/fixtures/1.html"]).forEach((path) => {
         fileExists(path)
         fileDoesNotInclude(path, "<script>")
@@ -139,14 +146,15 @@ describe("rollup-plugin-html-entry", () => {
         external: ["test/fixtures/0-and-1.html"],
         exclude: ["test/fixtures/3.html"],
         output: "tmp"
-    }).then((bundle) => {
-      const code = bundle.generate({ format: "cjs" }).code
-      doesNotInclude(code, "exports.zero = zero;") // external
-      doesNotInclude(code, "exports.one = one;") // external
-      doesNotInclude(code, `export const three = 3;`) // excluded
-      includes(code, `console.log("Hello, 2");`)
-      return bundle.write({ format: "es", dest: "tmp/bundle.js"})
-    }).then(() => {
+    }).then((bundle) =>
+      bundle.generate({ format: "cjs" }).then(({ code }) => {
+        doesNotInclude(code, "exports.zero = zero;") // external
+        doesNotInclude(code, "exports.one = one;") // external
+        doesNotInclude(code, `export const three = 3;`) // excluded
+        includes(code, `console.log("Hello, 2");`)
+        return bundle.write({ format: "es", file: "tmp/bundle.js"})
+      })
+    ).then(() => {
 
       fileExists("tmp/test/fixtures/all-imports.html")
       fileIncludes("tmp/test/fixtures/all-imports.html", `<link rel="import" href="0.html">`) // external
@@ -168,19 +176,20 @@ describe("rollup-plugin-html-entry", () => {
   it("allows to prevent exporting", () =>
     makeBundle(
       { include: ["test/fixtures/*.html"], exports: false }
-    ).then((bundle) => {
-      const code = bundle.generate({ format: "iife" }).code
-      includes(code, `console.log("Hello, 2");`)
-      doesNotInclude(code, "zero")
-      doesNotInclude(code, "one")
-    })
+    ).then((bundle) =>
+      bundle.generate({ format: "iife" }).then(({ code }) => {
+        includes(code, `console.log("Hello, 2");`)
+        doesNotInclude(code, "zero")
+        doesNotInclude(code, "one")
+      })
+    )
   )
 
   it("writes html files into destination and strips scripts", () =>
     makeBundle(
       { include: ["test/fixtures/*.html"], output: "tmp" }
     ).then(
-      (bundle) => bundle.write({ format: "es", dest: "tmp/bundle.js"})
+      (bundle) => bundle.write({ format: "es", file: "tmp/bundle.js"})
     ).then(() => {
       matched(["tmp/test/fixtures/*.html"]).forEach((path) => {
         fileExists(path)
@@ -192,9 +201,9 @@ describe("rollup-plugin-html-entry", () => {
   it("bundles spec example in proper ordering", () =>
     makeBundle(
       { include: ["test/fixtures/spec-example/*.html"] }
-    ).then((bundle) => {
-      const code = bundle.generate({ format: "es" }).code
-      includes(code, `console.log('a.html');
+    ).then((bundle) =>
+      bundle.generate({ format: "cjs" }).then(({ code }) => {
+        includes(code, `console.log('a.html');
 
 console.log('b.html');
 
@@ -209,7 +218,8 @@ console.log('e.html');
 console.log('h.html');
 
 console.log('g.html');`)
-    })
+      })
+    )
   )
 
 })

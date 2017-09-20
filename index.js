@@ -167,10 +167,10 @@ export default (config) => {
 
   return {
     options(options) {
-      if (options.entry && options.entry !== entry) {
-        configure(options.entry)
+      if (options.input && options.input !== entry) {
+        configure(options.input)
       }
-      options.entry = entry
+      options.input = entry
       analyze()
     },
 
