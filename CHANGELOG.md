@@ -1,3 +1,25 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/leogr/rollup-plugin-html-entry/compare/v0.1.1...v0.2.0) (2017-09-20)
+
+
+### Breaking
+
+* Make plugin work with changes introduced by Rollup 0.45 and 0.48 ([5c608c0e444e1ed8adaa080e04af3122c8b96c69](https://github.com/leogr/rollup-plugin-html-entry/commit/5c608c0e444e1ed8adaa080e04af3122c8b96c69))
+
+### Docs
+
+* Config option `entry` is now `input` ([a73b0b841a4fbdde33bb0dbd6a74133ed51d4819](https://github.com/leogr/rollup-plugin-html-entry/commit/a73b0b841a4fbdde33bb0dbd6a74133ed51d4819))
+
+### Update
+
+* Package description ([fe6d9913d9abf7c12c179e724e3dae682c090b75](https://github.com/leogr/rollup-plugin-html-entry/commit/fe6d9913d9abf7c12c179e724e3dae682c090b75))
+
+### Upgrade
+
+* Min supported rollup version to 0.48 ([a3fb53227810890f9b7868f436218e6491eedabf](https://github.com/leogr/rollup-plugin-html-entry/commit/a3fb53227810890f9b7868f436218e6491eedabf))
+
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/leogr/rollup-plugin-html-entry/compare/v0.1.0...v0.1.1) (2017-08-04)
 
