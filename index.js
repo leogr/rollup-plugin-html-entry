@@ -199,7 +199,7 @@ export default (config) => {
       }
     },
 
-    ongenerate() {
+    generateBundle() {
       if (output) {
         return writeHtmls(htmls, output)
       }

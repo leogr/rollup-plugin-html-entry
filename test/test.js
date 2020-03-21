@@ -67,7 +67,7 @@ describe("rollup-plugin-html-entry", () => {
 
   it("takes a single file as input", () =>
     makeBundle("test/fixtures/0.html").then((bundle) =>
-      bundle.generate({ format: "cjs" }).then(({ code }) => {
+      bundle.generate({ format: "cjs" }).then(({ output: [{ code }] }) => {
         includes(code, "exports.zero = zero;")
       })
     )
@@ -75,7 +75,7 @@ describe("rollup-plugin-html-entry", () => {
 
   it("takes an array of files as input", () =>
     makeBundle(["test/fixtures/0.html", "test/fixtures/1.html"]).then((bundle) =>
-      bundle.generate({ format: "cjs" }).then(({ code }) => {
+      bundle.generate({ format: "cjs" }).then(({ output: [{ code }] }) => {
         includes(code, "exports.zero = zero;")
         includes(code, "exports.one = one;")
       })
@@ -84,7 +84,7 @@ describe("rollup-plugin-html-entry", () => {
 
   it("allows an empty array as input", () =>
     makeBundle([]).then((bundle) =>
-      bundle.generate({ format: "cjs" }).then(({ code }) => {
+      bundle.generate({ format: "cjs" }).then(({ output: [{ code }] }) => {
         doesNotInclude(code, "exports")
       })
     )
@@ -92,7 +92,7 @@ describe("rollup-plugin-html-entry", () => {
 
   it("takes a glob as input", () =>
     makeBundle("test/fixtures/{0,1}.html").then((bundle) =>
-      bundle.generate({ format: "cjs" }).then(({ code }) => {
+      bundle.generate({ format: "cjs" }).then(({ output: [{ code }] }) => {
         includes(code, "exports.zero = zero;")
         includes(code, "exports.one = one;")
       })
@@ -101,7 +101,7 @@ describe("rollup-plugin-html-entry", () => {
 
   it("takes an array of globs as input", () =>
     makeBundle(["test/fixtures/{0,}.html", "test/fixtures/{1,}.html"]).then((bundle) =>
-      bundle.generate({ format: "cjs" }).then(({ code }) => {
+      bundle.generate({ format: "cjs" }).then(({ output: [{ code }] }) => {
         includes(code, "exports.zero = zero;")
         includes(code, "exports.one = one;")
       })
@@ -112,7 +112,7 @@ describe("rollup-plugin-html-entry", () => {
     makeBundle(
       { include: ["test/fixtures/*.html"], exclude: ["test/fixtures/1.html"] }
     ).then((bundle) =>
-      bundle.generate({ format: "cjs" }).then(({ code }) => {
+      bundle.generate({ format: "cjs" }).then(({ output: [{ code }] }) => {
         includes(code, "exports.zero = zero;")
         includes(code, `console.log("Hello, 2");`)
         doesNotInclude(code, "exports.one = one;")
@@ -124,7 +124,7 @@ describe("rollup-plugin-html-entry", () => {
     makeBundle(
       { include: ["test/fixtures/all-imports.html"], external: ["test/fixtures/1.html"], output: "tmp" }
     ).then((bundle) =>
-      bundle.generate({ format: "cjs" }).then(({ code }) => {
+      bundle.generate({ format: "cjs" }).then(({ output: [{ code }] }) => {
         includes(code, "exports.zero = zero;")
         includes(code, `console.log("Hello, 2");`)
         doesNotInclude(code, "exports.one = one;")
@@ -147,7 +147,7 @@ describe("rollup-plugin-html-entry", () => {
         exclude: ["test/fixtures/3.html"],
         output: "tmp"
     }).then((bundle) =>
-      bundle.generate({ format: "cjs" }).then(({ code }) => {
+      bundle.generate({ format: "cjs" }).then(({ output: [{ code }] }) => {
         doesNotInclude(code, "exports.zero = zero;") // external
         doesNotInclude(code, "exports.one = one;") // external
         doesNotInclude(code, `export const three = 3;`) // excluded
@@ -177,7 +177,7 @@ describe("rollup-plugin-html-entry", () => {
     makeBundle(
       { include: ["test/fixtures/*.html"], exports: false }
     ).then((bundle) =>
-      bundle.generate({ format: "iife" }).then(({ code }) => {
+      bundle.generate({ format: "iife" }).then(({ output: [{ code }] }) => {
         includes(code, `console.log("Hello, 2");`)
         doesNotInclude(code, "zero")
         doesNotInclude(code, "one")
@@ -202,7 +202,7 @@ describe("rollup-plugin-html-entry", () => {
     makeBundle(
       { include: ["test/fixtures/spec-example/*.html"] }
     ).then((bundle) =>
-      bundle.generate({ format: "cjs" }).then(({ code }) => {
+      bundle.generate({ format: "cjs" }).then(({ output: [{ code }] }) => {
         includes(code, `console.log('a.html');
 
 console.log('b.html');

@@ -4,7 +4,8 @@
     "semi": "off",
     "max-params": "off",
     "max-statements": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "arrow-parens": "off"
   },
   "env": {
     "es6": true,
