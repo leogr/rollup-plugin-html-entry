@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-html-entry",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Use HTML files as entry points in your rollup bundle",
   "main": "dist/rollup-plugin-html-entry.js",
   "jsnext:main": "dist/rollup-plugin-html-entry.mjs",

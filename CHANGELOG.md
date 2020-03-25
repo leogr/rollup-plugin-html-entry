@@ -1,3 +1,24 @@
+# [0.3.0](https://github.com/leogr/rollup-plugin-html-entry/compare/v0.2.0...v0.3.0) (2020-03-25)
+
+
+### Build
+
+* Add node 13 to CI ([86406fb](https://github.com/leogr/rollup-plugin-html-entry/commit/86406fb7e303e1fdcdba0fe909a77d8768b02546))
+
+### Fix
+
+* Git ignore package-lock.json ([6645143](https://github.com/leogr/rollup-plugin-html-entry/commit/664514364f56075442a6e41b41b7c21949ce5b4a))
+* Removed package-lock.json, updated yarn.lock. ([d9e03ec](https://github.com/leogr/rollup-plugin-html-entry/commit/d9e03ecd9d88d311ee1a1cdb44c8f4f12e4266be))
+* Travis fix ([434f979](https://github.com/leogr/rollup-plugin-html-entry/commit/434f979f227ea2d2554f5284e632b16c38e37583))
+* Travis fix ([f767469](https://github.com/leogr/rollup-plugin-html-entry/commit/f767469223e46205645853b55334fcbe8b0073bb))
+* Working with rollup >= 1.0.0 (fixes #2) ([a4f6dcf](https://github.com/leogr/rollup-plugin-html-entry/commit/a4f6dcf27c30f784006cafd44c389fdecb264733)), closes [#2](https://github.com/leogr/rollup-plugin-html-entry/issues/2)
+
+### Upgrade
+
+* Bump lodash.template from 4.4.0 to 4.5.0 (#5) ([fc7db78](https://github.com/leogr/rollup-plugin-html-entry/commit/fc7db78f552cfaaf0efd7ab2a78dcdc74c93f9e6)), closes [#5](https://github.com/leogr/rollup-plugin-html-entry/issues/5)
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/leogr/rollup-plugin-html-entry/compare/v0.1.1...v0.2.0) (2017-09-20)
 
